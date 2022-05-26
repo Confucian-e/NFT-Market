@@ -5,6 +5,7 @@ import '@openzeppelin/contracts/token/ERC20/IERC20.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 
 contract Market {
+    // 替换地址
     address constant TOKEN_BUY = 0xCFf94b4606c1e3D73510A80d9868D9B07825D692;
     address constant TOKEN_POINT = 0xCFf94b4606c1e3D73510A80d9868D9B07825D692;
 
@@ -46,6 +47,7 @@ contract Market {
         emit PublishNFT(msg.sender, _tokenId, _price);
     }
 
+    // 每次购买成功都获得积分代币
     function getPoint(uint _price) internal {
         uint amount = _price / 2;
         IERC20(TOKEN_POINT).transfer(tx.origin, amount);

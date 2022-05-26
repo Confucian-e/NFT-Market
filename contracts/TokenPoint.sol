@@ -5,6 +5,6 @@ import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 
 contract TokenPoint is ERC20 {
     constructor() ERC20('TokenPoint', 'point') {
-        _mint(msg.sender, 10000);
+        _mint(msg.sender, 500000 * (10 ** decimals()));
     }
 }
