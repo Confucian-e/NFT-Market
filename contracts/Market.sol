@@ -69,24 +69,33 @@ contract Market is ERC721, ERC20 {
     function swap(address tokenIn, uint amountIn) public {
         uint BuyBeforeSwap = IERC20(TOKEN_BUY).balanceOf(address(this));
         uint PointBeforeSwap = IERC20(TOKEN_POINT).balanceOf(address(this));
-        uint total = BuyBeforeSwap * PointBeforeSwap;
+        // uint total = BuyBeforeSwap * PointBeforeSwap;
         
         if(tokenIn == TOKEN_BUY) {
             // Buy 换 Point
             IERC20(TOKEN_BUY).transferFrom(msg.sender, address(this), amountIn);
-            uint BuyAfterSwap = IERC20(TOKEN_BUY).balanceOf(address(this));
-            uint amountOutPoint = total / BuyAfterSwap;
+            // uint BuyAfterSwap = IERC20(TOKEN_BUY).balanceOf(address(this));
+            uint amountOutPoint = cal(BuyBeforeSwap, PointBeforeSwap, amountIn);
             IERC20(TOKEN_POINT).transfer(msg.sender, amountOutPoint);
 
             emit Swap(msg.sender, tokenIn, TOKEN_POINT, amountIn, amountOutPoint);
         } else {
             // Point 换 Buy
             IERC20(TOKEN_POINT).transferFrom(msg.sender, address(this), amountIn);
-            uint PointAfterSwap = IERC20(TOKEN_BUY).balanceOf(address(this));
-            uint amountOutBuy = total / PointAfterSwap;
+            // uint PointAfterSwap = IERC20(TOKEN_BUY).balanceOf(address(this));
+            uint amountOutBuy = cal(PointBeforeSwap, BuyBeforeSwap, amountIn);
             IERC20(TOKEN_BUY).transfer(msg.sender, amountOutBuy);
 
             emit Swap(msg.sender, tokenIn, TOKEN_BUY, amountIn, amountOutBuy);
         }
+    }
+
+    /// @param x 原来 tokenA 的数量
+    /// @param y 原来 tokenB 的数量
+    /// @param i 这次交易要兑换的 token 数量
+    /// @param out 可以兑换到的 token 数量
+    function cal(uint x, uint y, uint i) pure internal returns (uint out) {
+        uint temp = (x * y) / (x + i);
+        out = y - temp;
     }
 }
