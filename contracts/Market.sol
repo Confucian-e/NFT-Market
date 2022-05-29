@@ -6,7 +6,7 @@ import '@openzeppelin/contracts/token/ERC20/ERC20.sol';
 import '@openzeppelin/contracts/token/ERC721/IERC721.sol';
 import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 
-contract Market is ERC721, ERC20 {
+contract Market is ERC721 {
     // 替换地址
     address constant TOKEN_BUY = 0xCFf94b4606c1e3D73510A80d9868D9B07825D692;
     address constant TOKEN_POINT = 0xCFf94b4606c1e3D73510A80d9868D9B07825D692;
