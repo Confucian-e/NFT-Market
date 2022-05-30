@@ -8,13 +8,16 @@ import '@openzeppelin/contracts/token/ERC721/ERC721.sol';
 import '@openzeppelin/contracts/utils/Counters.sol';
 
 contract Market is ERC721 {
-
+    using Counters for Counters.Counter;
     // 替换地址
     address constant TOKEN_BUY = 0xCFf94b4606c1e3D73510A80d9868D9B07825D692;
     address constant TOKEN_POINT = 0xCFf94b4606c1e3D73510A80d9868D9B07825D692;
 
     /// @dev 合约创建者
     address immutable creator;
+
+    /// @dev 记录NFT的序号
+    Counters.Counter private _tokenIds;
 
     constructor() ERC721("NFT-16group", "NFT-16") {
         creator = msg.sender;
@@ -34,12 +37,14 @@ contract Market is ERC721 {
     }
 
     // 买家购买NFT（铸造）
-    function buyNFT(uint tokenId, uint price) public {
+    function buyNFT(uint price) public {
         IERC20(TOKEN_BUY).transferFrom(msg.sender, address(this), price);
-        _safeMint(msg.sender, tokenId);
+        uint newItemId = _tokenIds.current();
+        _safeMint(msg.sender, newItemId);
 
-        emit BuyNFT(msg.sender, price / 100, tokenId);
+        emit BuyNFT(msg.sender, price / 100, newItemId);
 
+        _tokenIds.increment();
         getPoint(price);
     }
 
