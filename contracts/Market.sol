@@ -62,9 +62,10 @@ contract Market is ERC721 {
     // 创建者提取合约内的以太币
     function refund() external {
         require(msg.sender == creator, "Only creator can refund!");
-        payable(creator).transfer(address(this).balance);
+        uint balanceETH = address(this).balance;
+        payable(creator).transfer(balanceETH);
 
-        emit Refund(block.timestamp, address(this).balance);
+        emit Refund(block.timestamp, balanceETH);
     }
 
     // TokenBuy 和 TokenPoint 建个池子来兑换
